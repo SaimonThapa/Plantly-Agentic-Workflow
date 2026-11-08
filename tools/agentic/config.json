@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "approved_task_ids": ["F-000"],
+  "allow_next_task_selection": false,
+  "require_clean_git_at_task_start": true,
+  "max_attempts_per_task": 3,
+  "attempt_timeout_seconds": 600,
+  "verification_timeout_seconds": 180,
+  "tiers": {
+    "normal": [
+      {"reasoning_effort": "low", "model": null},
+      {"reasoning_effort": "medium", "model": null},
+      {"reasoning_effort": "high", "model": null}
+    ],
+    "security": [
+      {"reasoning_effort": "medium", "model": null},
+      {"reasoning_effort": "high", "model": null}
+    ],
+    "science": [
+      {"reasoning_effort": "medium", "model": null},
+      {"reasoning_effort": "high", "model": null}
+    ]
+  },
+  "task_risk": {
+    "F-020": "security",
+    "F-040": "science",
+    "G-010": "science",
+    "G-020": "security"
+  },
+  "verification": {
+    "F-000": {
+      "required_paths": ["frontend/package.json", "backend/app/main.py", "backend/alembic.ini"],
+      "commands": [
+        {"cwd": "frontend", "argv": ["npm", "run", "lint"]},
+        {"cwd": "frontend", "argv": ["npm", "run", "build"]},
+        {"cwd": "backend", "argv": ["python", "-m", "ruff", "check", "."]},
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "-q"]},
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "tests/integration/test_database.py", "-q"]}
+      ]
+    },
+    "D-010": {
+      "required_paths": ["docs/agent/DATASET_AUDIT.md", "backend/tests/unit/test_dataset_audit.py"],
+      "commands": [
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "tests/unit/test_dataset_audit.py", "-q"]}
+      ]
+    },
+    "F-010": {
+      "required_paths": ["frontend/tests/e2e/landing.spec.js"],
+      "commands": [
+        {"cwd": "frontend", "argv": ["npm", "run", "lint"]},
+        {"cwd": "frontend", "argv": ["npm", "run", "build"]},
+        {"cwd": "frontend", "argv": ["npx", "playwright", "test", "tests/e2e/landing.spec.js"]}
+      ]
+    },
+    "F-015": {
+      "required_paths": ["frontend/tests/e2e/pricing.spec.js"],
+      "commands": [
+        {"cwd": "frontend", "argv": ["npm", "run", "lint"]},
+        {"cwd": "frontend", "argv": ["npx", "playwright", "test", "tests/e2e/pricing.spec.js"]}
+      ]
+    },
+    "F-020": {
+      "required_paths": ["backend/tests/security", "frontend/tests/e2e/auth.spec.js"],
+      "commands": [
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "tests/security", "-q"]},
+        {"cwd": "frontend", "argv": ["npx", "playwright", "test", "tests/e2e/auth.spec.js"]}
+      ]
+    },
+    "F-030": {
+      "required_paths": ["backend/tests/integration", "frontend/tests/e2e/onboarding.spec.js"],
+      "commands": [
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "tests/integration", "-q"]},
+        {"cwd": "frontend", "argv": ["npx", "playwright", "test", "tests/e2e/onboarding.spec.js"]}
+      ]
+    },
+    "F-040": {
+      "required_paths": ["backend/tests/integration/test_knowledge_ingestion.py"],
+      "commands": [
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "tests/unit", "tests/contracts", "-q"]},
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "tests/integration/test_knowledge_ingestion.py", "-q"]}
+      ]
+    },
+    "F-050": {
+      "required_paths": ["backend/tests/integration/test_plan_jobs.py", "frontend/tests/e2e/generation.spec.js"],
+      "commands": [
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "tests/integration/test_plan_jobs.py", "-q"]},
+        {"cwd": "frontend", "argv": ["npx", "playwright", "test", "tests/e2e/generation.spec.js"]}
+      ]
+    },
+    "F-060": {
+      "required_paths": ["frontend/tests/e2e/dashboard.spec.js"],
+      "commands": [
+        {"cwd": "frontend", "argv": ["npm", "run", "build"]},
+        {"cwd": "frontend", "argv": ["npx", "playwright", "test", "tests/e2e/dashboard.spec.js"]}
+      ]
+    },
+    "F-070": {
+      "required_paths": ["backend/tests/security", "frontend/tests/e2e/chat.spec.js"],
+      "commands": [
+        {"cwd": "backend", "argv": ["python", "-m", "pytest", "tests/security", "-q"]},
+        {"cwd": "frontend", "argv": ["npx", "playwright", "test", "tests/e2e/chat.spec.js"]}
+      ]
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "description": "Minimal Plantly hooks: concise startup context and small destructive-command guard. No Stop loops or lint on every tool.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -c \"import pathlib,sys,runpy;parts=[pathlib.Path.cwd(),*pathlib.Path.cwd().parents];files=[p/'tools'/'agentic'/'hooks.py' for p in parts];matches=[p for p in files if p.is_file()];assert matches,'Plantly hooks.py missing from cwd ancestor';sys.argv=[str(matches[0]),'start'];runpy.run_path(str(matches[0]),run_name='__main__')\"",
+            "commandWindows": "py -3 -c \"import pathlib,sys,runpy;parts=[pathlib.Path.cwd(),*pathlib.Path.cwd().parents];files=[p/'tools'/'agentic'/'hooks.py' for p in parts];matches=[p for p in files if p.is_file()];assert matches,'Plantly hooks.py missing from cwd ancestor';sys.argv=[str(matches[0]),'start'];runpy.run_path(str(matches[0]),run_name='__main__')\"",
+            "timeout": 5,
+            "additionalContextLimit": 450
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -c \"import pathlib,sys,runpy;parts=[pathlib.Path.cwd(),*pathlib.Path.cwd().parents];files=[p/'tools'/'agentic'/'hooks.py' for p in parts];matches=[p for p in files if p.is_file()];assert matches,'Plantly hooks.py missing from cwd ancestor';sys.argv=[str(matches[0]),'guard'];runpy.run_path(str(matches[0]),run_name='__main__')\"",
+            "commandWindows": "py -3 -c \"import pathlib,sys,runpy;parts=[pathlib.Path.cwd(),*pathlib.Path.cwd().parents];files=[p/'tools'/'agentic'/'hooks.py' for p in parts];matches=[p for p in files if p.is_file()];assert matches,'Plantly hooks.py missing from cwd ancestor';sys.argv=[str(matches[0]),'guard'];runpy.run_path(str(matches[0]),run_name='__main__')\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

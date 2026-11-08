@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "notice": "This is a human-supervised roadmap, NOT an executable scheduler. All statuses start todo; source specs and actual code decide acceptance. Never self-approve science or release.",
+  "tasks": [
+    {
+      "id": "F-000",
+      "title": "Development foundation and DB/test scaffolding",
+      "status": "todo",
+      "depends_on": [],
+      "goal": "Build Next.js/FastAPI topology, disposable PostgreSQL/pgvector, Alembic and real lint/test commands.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "D-010",
+      "title": "Audit real curated YAML and JSON files",
+      "status": "todo",
+      "depends_on": [],
+      "goal": "Inventory schemas, source references, units, placeholders and licensing; document proposed import mapping without scientific approval.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "F-010",
+      "title": "Landing page from approved v4 spec",
+      "status": "todo",
+      "depends_on": [
+        "F-000"
+      ],
+      "goal": "Build functional responsive marketing surface; use labeled artwork placeholders, honest CTAs and browser checks.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "F-015",
+      "title": "Truthful pricing entry and navigation",
+      "status": "todo",
+      "depends_on": [
+        "F-000"
+      ],
+      "goal": "Provide a real pricing information route/entry without invented paid plans, trials or billing.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "F-020",
+      "title": "Authentication and authorized sessions",
+      "status": "todo",
+      "depends_on": [
+        "F-000"
+      ],
+      "goal": "Implement signup/login/logout, opaque sessions, CSRF, owner isolation and real auth tests.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "F-030",
+      "title": "Resumable onboarding, plots and seasons",
+      "status": "todo",
+      "depends_on": [
+        "F-020"
+      ],
+      "goal": "Persist user inputs and draft state; respect unknown soil values and plot-season ownership.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "F-040",
+      "title": "Research storage, ingestion and scientific gates",
+      "status": "todo",
+      "depends_on": [
+        "F-000",
+        "D-010"
+      ],
+      "goal": "Version sources and ingest validated YAML idempotently; reviewed-rule eligibility abstains on unsupported cases.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "F-050",
+      "title": "Plan job and immutable blueprint storage",
+      "status": "todo",
+      "depends_on": [
+        "F-030",
+        "F-040"
+      ],
+      "goal": "Persist idempotent plan jobs, worker outcomes, validated versioned plans and source provenance.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "F-060",
+      "title": "Saved-plan dashboard",
+      "status": "todo",
+      "depends_on": [
+        "F-050"
+      ],
+      "goal": "Render real selected plot/season plan data; truthful unavailable and stale states.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "F-070",
+      "title": "Plan-linked chat and non-mutating what-if",
+      "status": "todo",
+      "depends_on": [
+        "F-050"
+      ],
+      "goal": "Bind secure chat to plan versions; cite eligible evidence and do not mutate saved plans.",
+      "human_gates": [],
+      "evidence": []
+    },
+    {
+      "id": "G-010",
+      "title": "Activate first reviewed agronomy scope",
+      "status": "todo",
+      "depends_on": [
+        "F-040"
+      ],
+      "goal": "Enable only human-reviewed crop/region/method/source/rule versions with independent evidence.",
+      "human_gates": [
+        "scientific_reviewer_approval"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "G-020",
+      "title": "Hardening for temporary public demo",
+      "status": "todo",
+      "depends_on": [
+        "F-010",
+        "F-015",
+        "F-020",
+        "F-030",
+        "F-050",
+        "F-060",
+        "F-070"
+      ],
+      "goal": "Complete security, privacy/retention, cleanup and real deployment checks before public release.",
+      "human_gates": [
+        "retention_privacy_approval",
+        "hosting_operator_approval"
+      ],
+      "evidence": []
+    }
+  ]
+}
