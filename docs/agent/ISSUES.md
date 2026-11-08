@@ -10,3 +10,6 @@ Template for future entries:
 - **Attempts made:**
 - **Required human input / next fix:**
 - **Resolved evidence:** leave blank until actually verified
+
+- **2026-11-08T08:45:13+00:00 / F-000 / infrastructure:** BLOCKED_BY_INFRA
+  - Evidence: `.agentic\logs\F-000\attempt-01` (local, git-ignored logs)
