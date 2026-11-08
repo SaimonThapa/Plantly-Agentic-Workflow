@@ -326,8 +326,8 @@ def run_one(task: dict, registry: dict, config: dict, runtime: dict) -> int:
         folder.mkdir(parents=True, exist_ok=True)
         last_message = folder / "codex-last-message.txt"
         argv = [codex, "exec", "--cd", str(ROOT), "--sandbox", "workspace-write",
-                "--ask-for-approval", "never", "--json", "--output-last-message", str(last_message),
-                "-c", f'model_reasoning_effort="{stage["reasoning_effort"]}"']
+        "--json", "--output-last-message", str(last_message),
+        "-c", f'model_reasoning_effort="{stage["reasoning_effort"]}"']
         if stage.get("model"):
             argv.extend(["--model", stage["model"]])
         argv.append("-")
