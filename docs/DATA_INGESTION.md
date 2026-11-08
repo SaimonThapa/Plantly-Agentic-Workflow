@@ -1,12 +1,12 @@
 # Curated data: audit before schema or import
 
-Canonical input location: `data/curated/`. The user supplies their existing YAML datasets and JSON fixtures **manually**; this starter does not contain or synthesize them.
+Canonical input location: `data/curated/`. User-supplied YAML datasets and JSON fixtures are now present. See [D-010 audit](agent/DATASET_AUDIT.md) and its [file/schema inventory](curated_inventory.json); presence does not establish scientific approval.
 
 - `datasets/`: `credits.yaml`, `crops.yaml`, `lime_table.yaml`, `nutrient_recs.yaml`, `practices.yaml`, `problems.yaml`, `products.yaml`, `rotation_rules.yaml`, `soil_test_levels.yaml`.
-- `sources.yaml`: source catalog; retain its actual schema/IDs.
-- `research/`: notes, permitted papers, excerpts and explicit source provenance. `source_notes.yaml` can be placed here after reference paths are audited.
+- `rule_reviews/sources.yaml`: actual source catalog location; retain its schema/IDs. This file is not a rule-approval manifest.
+- `research/source_notes.yaml`: supplied notes with source references and page/section locators; publication accuracy and reuse permissions remain unverified.
 - `fixtures/`: `beginner_grower.json`, `demo_grower.json`, `diverse_farm.json`, `high_input_grower.json` — synthetic examples only, never production grower records.
-- `rule_reviews/`: only real documented human approvals; no automated approvals, and no fictional records.
+- `rule_reviews/`: future approval records must contain only real documented human approvals; the existing source catalog grants none.
 
 **D-010 dataset audit:** examine actual schemas, source IDs, references, method/region/crop restrictions, licensing, units, placeholder flags and import order; do not rewrite original source files just to make an import pass.
 

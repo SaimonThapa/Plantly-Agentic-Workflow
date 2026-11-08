@@ -20,11 +20,29 @@
     {
       "id": "D-010",
       "title": "Audit real curated YAML and JSON files",
-      "status": "todo",
+      "status": "code_verified",
       "depends_on": [],
       "goal": "Inventory schemas, source references, units, placeholders and licensing; document proposed import mapping without scientific approval.",
       "human_gates": [],
-      "evidence": []
+      "evidence": [
+        {
+          "at": "2026-11-08T10:33:16+00:00",
+          "kind": "runner_verification",
+          "checks": [
+            {
+              "cwd": "backend",
+              "argv": [
+                "python",
+                "-m",
+                "pytest",
+                "tests/unit/test_dataset_audit.py",
+                "-q"
+              ]
+            }
+          ],
+          "logs": ".agentic\\logs\\D-010\\attempt-03"
+        }
+      ]
     },
     {
       "id": "F-010",
