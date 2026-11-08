@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "approved_task_ids": ["F-000"],
+  "approved_task_ids": ["F-000", "D-010"],
   "allow_next_task_selection": false,
   "require_clean_git_at_task_start": true,
   "max_attempts_per_task": 3,

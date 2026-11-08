@@ -20,3 +20,4 @@ test-results/
 .cache/
 data/raw/
 .agentic/
+**/*.egg-info/
