@@ -12,3 +12,11 @@ Approved behavior: before building each UI surface, ask whether required images/
 | Layout reference screenshots (4) | IMG_4368, IMG_4362, IMG_4365, IMG_4369 | Awaiting user for exact visual matching |
 
 During frontend implementation, prefer a single accessible `MissingAsset` component reused across slots. Keep placeholders visibly labeled `AWAITING USER ASSET`. Mark an asset final only after the real file, integration and responsive review exist. Do not silently use random stock photography or generated logos.
+
+## F-010 implementation handoff — 2026-11-08
+
+Repository inspection found the approved mark at `frontend/public/assets/images/planty_logo.svg` (real SVG paths) and the approved tractor at `frontend/public/assets/images/golden_harvest_tractor_at_sunset.png`. Both are integrated; Next Image supplies responsive optimized hero sizes. Responsive visual approval remains pending browser access.
+
+The four layout references are also present in that directory; they are references, not published page artwork. The earlier Awaiting user entries above are superseded for these supplied files only.
+
+Still awaiting user assets: three distinct feature backgrounds and nine distinct benefit photographs. Each slot is visibly labeled `AWAITING USER ASSET`, with its subject and tall/portrait crop described in the page. No stand-in artwork was generated. Optional light footer mark remains deferred; the original full-color mark is used.

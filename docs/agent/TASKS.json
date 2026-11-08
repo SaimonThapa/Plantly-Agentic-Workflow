@@ -47,13 +47,46 @@
     {
       "id": "F-010",
       "title": "Landing page from approved v4 spec",
-      "status": "todo",
+      "status": "code_verified",
       "depends_on": [
         "F-000"
       ],
       "goal": "Build functional responsive marketing surface; use labeled artwork placeholders, honest CTAs and browser checks.",
       "human_gates": [],
-      "evidence": []
+      "evidence": [
+        {
+          "at": "2026-11-08T16:35:57+00:00",
+          "kind": "verification_only",
+          "checks": [
+            {
+              "cwd": "frontend",
+              "argv": [
+                "npm",
+                "run",
+                "lint"
+              ]
+            },
+            {
+              "cwd": "frontend",
+              "argv": [
+                "npm",
+                "run",
+                "build"
+              ]
+            },
+            {
+              "cwd": "frontend",
+              "argv": [
+                "npx",
+                "playwright",
+                "test",
+                "tests/e2e/landing.spec.js"
+              ]
+            }
+          ],
+          "logs": ".agentic\\logs\\F-010\\manual-verify-20261108T163537-13904"
+        }
+      ]
     },
     {
       "id": "F-015",

@@ -32,3 +32,9 @@ Template for future entries:
 
 - **2026-11-08T09:02:20+00:00 / F-000 / infrastructure:** BLOCKED_BY_INFRA
   - Evidence: `.agentic\logs\F-000\attempt-02` (local, git-ignored logs)
+
+- **2026-11-08T13:04:19+00:00 / F-010 / infrastructure:** BLOCKED_BY_INFRA
+  - Evidence: `.agentic\logs\F-010\attempt-01` (local, git-ignored logs)
+
+- **2026-11-08T16:19:30+00:00 / F-010 / verification:** Required artifact absent: frontend/tests/e2e/landing.spec.js
+  - Evidence: `.agentic\logs\F-010\manual-verify-20261108T161930-15320` (local, git-ignored logs)

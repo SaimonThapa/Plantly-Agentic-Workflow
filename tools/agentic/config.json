@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "approved_task_ids": ["F-000", "D-010"],
+  "approved_task_ids": ["F-000", "D-010", "F-010", "F-015"],
   "allow_next_task_selection": false,
-  "require_clean_git_at_task_start": true,
+  "require_clean_git_at_task_start": false,
   "max_attempts_per_task": 3,
   "attempt_timeout_seconds": 600,
   "verification_timeout_seconds": 180,

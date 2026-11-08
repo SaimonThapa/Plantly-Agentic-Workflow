@@ -1,0 +1,23 @@
+﻿"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { useRef, useState } from "react";
+const links = [["Our Mission","#mission"],["Key Features","#features"],["Benefits","#benefits"],["Start Planning","#availability"],["Pricing","#pricing"],["Sign Up","#availability"]];
+export function LandingNav() {
+ const [open,setOpen]=useState(false); const toggle=useRef(null);
+ return <header className="hero-header" onKeyDown={event=>{if(event.key==="Escape"){setOpen(false);toggle.current.focus();}}}><nav className="nav-left" aria-label="Sections">{links.slice(0,3).map(([label,href])=><a key={label} href={href}>{label}</a>)}</nav><Link className="brand" href="/" aria-label="Plantly home"><Image src="/assets/images/planty_logo.svg" width={64} height={64} alt="" priority /></Link><nav className="nav-right" aria-label="Get started">{links.slice(3).map(([label,href])=><a key={label} href={href}>{label}</a>)}</nav><button ref={toggle} className="menu-toggle" aria-expanded={open} aria-controls="mobile-menu" onClick={()=>setOpen(!open)}>Menu {open?"−":"+"}</button><nav id="mobile-menu" className="mobile-menu" aria-label="Mobile navigation" hidden={!open}>{links.map(([label,href])=><a key={label} href={href} onClick={()=>setOpen(false)}>{label}</a>)}</nav></header>;
+}
+const benefits=[
+ {title:"Boost Harvest Output",description:"Use your plot’s soil results, previous crops, and seasonal goals to identify sensible nutrient and rotation decisions. Plantly helps you make these choices with clearer research context and budget trade-offs.",cards:[["Optimized Growing Conditions","Close-up green foliage; space for a Soil Snapshot preview."],["Reduced Resource Waste","Green leaves with water droplets."],["Smarter Harvest Timing","Textured leaves and a field approaching harvest."]]},
+ {title:"Minimize Irrigation Requirements",description:"Consider available weather context and your plot’s needs when planning watering. These are planning goals, not a promise of reduced water use.",cards:[["Weather Timing","Rain clouds over a growing field."],["Water-use Context","Irrigation beside a planted bed."],["Moisture Awareness","Mulched soil around a growing crop."]]},
+ {title:"Improve Soil Health",description:"Bring soil records, crop history, and compost or cover-crop considerations into a clearer seasonal plan. Improvements require local evidence and cannot be guaranteed.",cards:[["Soil Records","Soil sampling in a cultivated bed."],["Cover-crop Planning","A distinct field of cover crops."],["Nutrient Balance","Compost and soil texture in a garden."]]}
+];
+function BenefitCarousel({cards}) {
+ const rail=useRef(null); const [progress,setProgress]=useState(0);
+ return <div className="carousel"><div ref={rail} className="carousel-rail" tabIndex={0} role="region" aria-label="Benefit artwork carousel" onScroll={event=>{const el=event.currentTarget;setProgress(el.scrollLeft/Math.max(1,el.scrollWidth-el.clientWidth));}}>{cards.map(([title,art],index)=><article className="benefit-card" key={title}><div className="missing-asset"><span>AWAITING USER ASSET</span><p>{art} Portrait crop.</p></div>{index===0&&<div className="preview"><p>Soil Snapshot · Concept</p><p>Plot data unavailable</p></div>}<h4>{title}</h4></article>)}</div><div className="carousel-controls"><button aria-label="Previous benefit card" onClick={()=>rail.current.scrollBy({left:-(rail.current.firstElementChild.offsetWidth+16)})}>←</button><div className="carousel-track" aria-hidden="true"><span style={{transform:`translateX(${progress*200}%)`}} /></div><button aria-label="Next benefit card" onClick={()=>rail.current.scrollBy({left:rail.current.firstElementChild.offsetWidth+16})}>→</button></div></div>;
+}
+export function Benefits() {
+ const [active,setActive]=useState(0);
+ return <section id="benefits" className="section wrap" aria-labelledby="benefits-title"><h2 id="benefits-title" className="eyebrow">Our Green Innovation Products</h2>{benefits.map(({title,description,cards},index)=><div className="benefit" key={title}><h3><button id={`benefit-trigger-${index}`} className="benefit-trigger" aria-expanded={active===index} aria-controls={`benefit-panel-${index}`} onClick={()=>setActive(active===index?null:index)}><span className="benefit-number">0{index+1}.</span><span>{title}</span><span aria-hidden="true">{active===index?"↑":"↓"}</span></button></h3><div id={`benefit-panel-${index}`} role="region" aria-labelledby={`benefit-trigger-${index}`} hidden={active!==index}>{active===index&&<div className="benefit-content"><p>{description}</p><BenefitCarousel key={index} cards={cards}/></div>}</div></div>)}</section>;
+}
+
