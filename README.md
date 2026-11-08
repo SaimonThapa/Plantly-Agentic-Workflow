@@ -28,3 +28,7 @@ This is a **fresh, minimal project scaffold**, **not a working application or an
 `AGENTS.md` (small global rules); `frontend/AGENTS.md` and `backend/AGENTS.md` (local rules); `docs/agent/{STATE,TASKS,WORKFLOW,SKILLS,DECISIONS,ISSUES,ASSETS,PROMPTS}` (lightweight agent workflow); `.agents/skills/` (manual skills); `data/curated/` (manual datasets).
 
 **Reminder:** This workflow is supervised, one task per approved session. No magic full auto loop is promised; that was deliberately removed after problems with the previous runner.
+
+## F-000 development foundation
+
+See [local setup and real lint/test commands](docs/DEVELOPMENT.md). Application scaffolding now lives in frontend/ and backend/; the original starter inventory above describes the initial ZIP, not current implementation status.

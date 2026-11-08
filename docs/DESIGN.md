@@ -182,7 +182,8 @@ Use these exact values. The UI identity is **deep emerald + charcoal + white**, 
 ## 6. Brand imagery and materiality
 
 **Authorized brand assets and reference roles**
-- Approved emblem reference: `premium_spherical_plant_emblem.png` (gold right leaf + green spherical plant form). It is **PNG, not a real SVG**. A production SVG must be properly vectorized and reviewed.
+- For location go to `frontend\public\assets\images`
+- Approved emblem reference: `planty_logo.svg` (gold right leaf + green spherical plant form).
 - Approved white-tractor agricultural hero subject: `golden_harvest_tractor_at_sunset.png`, requiring responsive cropping/optimization if used.
 - `IMG_4368.jpeg` (AGRA): **composition reference** for full-bleed immersive hero, not a replacement Plantly asset.
 - `IMG_4362.webp`: photographic dark-green Key Features cards with small translucent data widgets.
@@ -286,6 +287,27 @@ Every viewport must maintain readable labels/units, uncut data/actions, clear co
 **Design in one sentence:** *A cinematic, nature-rooted brand on the outside; a crisp, honest, research-first decision tool on the inside—unified by forest green, charcoal, white, structured whitespace and restrained motion.*
 
 
-## Codex skill handoff (execution guidance only; does not change design decisions)
 
-The optional skills **Taste**, **Impeccable**, and **Animate** help implement or review this system **only if actually installed and discoverable**. Their activation rules and status live in [`agent/SKILLS.md`](agent/SKILLS.md). The approved tokens, page modes, layout, accessibility, and landing composition above always take precedence. Ponytail, if installed, is an engineering-simplicity plugin, not a design authority or guaranteed token-saving mechanism. Do not insert illustrative images as substitutes for missing user-provided artwork: use visibly labeled, responsive missing-asset placeholders instead.
+## Design skills — execution routing, not a new design authority
+
+Visual requirements, approved tokens, page geometry, composition, and honest-data rules in this document remain authoritative. The landing page additionally follows `docs/LANDING_DESIGN.md`.
+
+Repository-local Codex skills are discovered from `.agents/skills/<skill-name>/SKILL.md`. A reference to a skill is **not proof of installation**. Read the actual skill `name:` field and confirm its availability before invocation.
+
+For meaningful new frontend work, consult **Taste** (typically `design-taste-frontend`) for composition and implementation only when installed. For a completed UI slice, consult **Impeccable** for targeted layout/accessibility/responsive critique when installed. Consult **Animate** only when an interaction genuinely needs motion; prefer reduced-motion-friendly CSS before adding dependencies. These tools may suggest improvements but cannot override this design system or invent missing image assets.
+
+**Plantly visual-review** and Playwright MCP/Test provide actual browser evidence at 320×700, 390×844, 768×1024, 1440×900 and 1920×1080 where configured. Missing artwork is a visibly labeled `AWAITING USER ASSET` placeholder until the user supplies a real asset; do not generate fake final photography.
+
+**Ponytail** is a separately installed engineering-simplicity plugin, not a design system or a guaranteed token/currency limiter. Follow its guidance only if installed and trusted; avoid unnecessary boilerplate, repeated large context loads, and unrelated skill invocations without weakening tests, accessibility, data provenance, or scientific approval.
+
+Exact tool selection and installation policy: `docs/agent/SKILLS.md`. Agent-specific task routing: root `AGENTS.md` and `frontend/AGENTS.md`. Do not repeat detailed skill installation instructions throughout this visual specification.
+
+Use these integrations only when installed and discoverable.
+
+Never override approved colors, typography, layout,
+responsive rules, scientific safety, or image requirements.
+
+If images are missing, render visibly labeled
+AWAITING USER ASSET placeholders.
+
+Read docs/agent/SKILLS.md for detailed routing.

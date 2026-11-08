@@ -13,3 +13,26 @@ Canonical input location: `data/curated/`. The user supplies their existing YAML
 **F-040 ingestion:** Alembic handles schema migrations. A separate, validated, idempotent script imports versioned source/catalog data and preserves provenance. Test repeated runs, failures, rollback and bad references on disposable PostgreSQL. Research in a database is not automatically eligible for scientific use. Existing legacy `verified` fields are not a substitute for source-version/rule review.
 
 Do not enable placeholder lime quantities, unreviewed nutrient numbers, or unsupported agronomy. Do not select embedding provider, dimension or vector column size without a documented decision. No production ingestion occurs solely because this instruction exists.
+
+### Incremental Research Ingestion Requirement
+
+Plantly must support incremental ingestion of additional YAML datasets and research papers after initial database setup.
+
+Requirements:
+
+- Provide a repeatable manual ingestion command.
+- Detect newly added, modified and unchanged source files.
+- Use stable IDs, version numbers and content hashes.
+- Prevent duplicate ingestion.
+- Preserve existing source versions, evidence and immutable user plans.
+- Validate source references, units, schemas and provenance.
+- Ingest structured YAML into appropriate PostgreSQL tables.
+- Extract, chunk and embed eligible research documents for pgvector retrieval.
+- Keep unreviewed scientific rules inactive.
+- Do not automatically regenerate existing users' plans.
+- Record import success, failure and validation details.
+- Test repeated imports and recovery from partial failures.
+- Do not require a new Alembic migration unless database schema changes.
+- Do not assume local files added after deployment are available inside a running container; support a persistent or deployable ingestion source.
+
+Do not enable automatic folder watching or continuous re-indexing in the initial MVP.

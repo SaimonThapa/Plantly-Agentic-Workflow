@@ -33,6 +33,8 @@ class RunnerTests(unittest.TestCase):
         (self.root / "tools/agentic").mkdir(parents=True)
         cfg = json.loads((BASE / "tools/agentic/config.json").read_text())
         registry = json.loads(TASKS_SOURCE.read_text())
+        for task in registry["tasks"]:
+            task["status"] = "todo"
         (self.root / "tools/agentic/config.json").write_text(json.dumps(cfg))
         (self.root / "docs/agent/TASKS.json").write_text(json.dumps(registry))
         for attr, new in (
@@ -108,6 +110,50 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(self.task["status"], "code_verified")
         self.assertEqual(self.runtime["tasks"]["F-000"]["attempts_used"], 1)
         self.assertEqual(self.runtime["tasks"]["F-000"]["attempts"][0]["reported_tokens"], 222)
+
+    def test_verify_only_succeeds_without_codex_or_attempt_reset(self):
+        self.task["status"] = "blocked_infra"
+        self.runtime["tasks"]["F-000"] = {"attempts_used": 2, "attempts": [], "status": "blocked_infra"}
+        runner.save_runtime(self.runtime)
+        runner.atomic_json(runner.TASK_FILE, self.reg)
+        with mock.patch.dict("os.environ", {"TEST_DATABASE_URL": "postgresql+psycopg://plantly:local@127.0.0.1:5433/plantly_test"}), \
+             mock.patch.object(runner, "check_git"), \
+             mock.patch.object(runner, "verify", return_value=(True, "All configured checks passed")) as verifier, \
+             mock.patch.object(runner, "run_one", side_effect=AssertionError("Must not run Codex")):
+            self.assertEqual(runner.main(["verify", "F-000"]), 0)
+        self.assertTrue(verifier.called)
+        self.assertEqual(self.task["status"], "blocked_infra")  # main loads registry from disk
+        updated = runner.load_json(runner.TASK_FILE)
+        self.assertEqual(updated["tasks"][0]["status"], "code_verified")
+        self.assertEqual(runner.get_runtime()["tasks"]["F-000"]["attempts_used"], 2)
+        self.assertEqual(updated["tasks"][0]["evidence"][-1]["kind"], "verification_only")
+
+    def test_verify_only_failure_preserves_blocked_state(self):
+        self.task["status"] = "blocked_infra"
+        runner.save_runtime(self.runtime)
+        runner.atomic_json(runner.TASK_FILE, self.reg)
+        with mock.patch.dict("os.environ", {"TEST_DATABASE_URL": "postgresql+psycopg://plantly:local@127.0.0.1:5433/plantly_test"}), \
+             mock.patch.object(runner, "check_git"), \
+             mock.patch.object(runner, "verify", return_value=(False, "Ruff failed")), \
+             mock.patch.object(runner, "run_one", side_effect=AssertionError("Must not run Codex")):
+            self.assertEqual(runner.main(["verify", "F-000"]), 1)
+        self.assertEqual(runner.load_json(runner.TASK_FILE)["tasks"][0]["status"], "blocked_infra")
+        self.assertEqual(runner.get_runtime()["tasks"], {})
+
+    def test_verify_only_refuses_nondisposable_database(self):
+        self.task["status"] = "blocked_infra"
+        runner.save_runtime(self.runtime)
+        runner.atomic_json(runner.TASK_FILE, self.reg)
+        with mock.patch.dict("os.environ", {"TEST_DATABASE_URL": "postgresql+psycopg://plantly:local@127.0.0.1:5432/plantly"}), \
+             self.assertRaisesRegex(runner.RunnerError, "disposable"):
+            runner.main(["verify", "F-000"])
+
+    def test_backend_verifier_prefers_project_venv(self):
+        backend = self.root / "backend"
+        local_python = backend / ".venv" / ("Scripts/python.exe" if runner.os.name == "nt" else "bin/python")
+        local_python.parent.mkdir(parents=True, exist_ok=True)
+        local_python.touch()
+        self.assertEqual(runner.verifier_executable("python", backend), str(local_python))
 
     def test_failed_verification_escalates_then_exhausts(self):
         def fake_run(argv, cwd, log, timeout, stdin_text=None):

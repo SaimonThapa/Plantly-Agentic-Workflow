@@ -1,6 +1,6 @@
-# Supervised Codex workflow — no hidden runner
+# Plantly — supervised development and optional bounded runner
 
-The previous unattended Python runner, lifecycle hooks, escalating retry loop, and automated status updater are intentionally **absent**. Use a simple Codex session to deliver **one approved task at a time**. This is less magical and easier to audit.
+An optional Python runner is available only if the user has manually copied `tools/agentic/` into this repository. It requires explicit approved task IDs and a second environment opt-in; it never self-starts and selects no more than one task per run. In the runner mode it owns task status and verification. Manual Codex sessions remain supported, but must not edit the runner's active task concurrently.
 
 ## Before a task
 
@@ -19,7 +19,7 @@ The previous unattended Python runner, lifecycle hooks, escalating retry loop, a
 
 ## Retry and interruption
 
-Try one small fix at a time. After two unsuccessful distinct repair attempts, stop with exact error and ask for direction rather than looping indefinitely. Never restart the same task automatically after an interruption without inspecting current Git diff and task state. The user decides when to run another Codex task.
+Runner mode uses the bounded stage list in `tools/agentic/config.json` (normal: low -> medium -> high; security/science: medium -> high) and persists attempt history across restarts. It halts at explicit human/infra blocks, rejects unapproved tasks, and never auto-grants scientific or release approvals. Manual sessions may still stop after two failed targeted fixes.
 
 ## Not claims
 

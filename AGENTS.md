@@ -22,9 +22,13 @@
 ## Skills and tooling
 - Codex project skills belong in `.agents/skills/<skill>/SKILL.md` (plural `agents`). The user installs third-party skills/plugins manually. **Check availability before invoking.**
 - Read `docs/agent/SKILLS.md` only for UI/tooling tasks. Taste = composition; Impeccable = targeted review; Animate = appropriate motion; Ponytail = simplicity; Playwright MCP = browser inspection **when available**. No skill can override approved product/design/science rules.
-- No custom Codex hooks or autonomous runner are included in this starter. See `docs/agent/WORKFLOW.md` for a supervised task loop.
+
+## Optional external task runner / Codex hooks
+- A manually installed, supervised runner may live at `tools/agentic/runner.py`, configured by `tools/agentic/config.json`.
+- The runner reads `docs/agent/TASKS.json`; only the runner may change status to `code_verified` when it is used, after all real configured checks pass. Never self-certify or fabricate test evidence.
+- A task is authorized only when listed in `config.json` **and** the user explicitly invokes `run TASK_ID --execute` with `PLANTLY_ALLOW_MODEL_RUN=1`. Do not invoke the runner yourself as a subtask.
+- Runtime logs/attempt limits persist under ignored `.agentic/`; hooks live under `.codex/hooks.json`. Neither is a substitute for user approvals, safe sandboxing or tests.
+- Review actual installed skills under `.agents/skills/` and plugin discovery; consult `docs/agent/SKILLS.md`. Never assume Ponytail, Taste, Impeccable or Animate is installed just because it is documented.
 
 ## Close a task
-- Run the checks that **actually exist** for the changed code; capture exact commands and results. UI work also needs real browser interaction and responsive verification once Playwright is configured.
-- Update `docs/agent/STATE.md` and that task's status in `TASKS.json` **only after evidence**; record issues in `docs/agent/ISSUES.md`. A tool not installed or a test not runnable is `not verified`, not `passed`.
-- Say what changed, what was tested, what remains unverified, and what human input is needed. Stop on unresolved fundamental decisions and human gates.
+When an external runner owns the task, DO NOT edit `docs/agent/TASKS.json` or its verification configuration. Supply code/tests and concise evidence; the runner updates status after real verifiers pass. In manual sessions without the runner, follow supervised checks and clearly document manual status updates.

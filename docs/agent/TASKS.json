@@ -5,11 +5,17 @@
     {
       "id": "F-000",
       "title": "Development foundation and DB/test scaffolding",
-      "status": "todo",
+      "status": "code_verified",
       "depends_on": [],
       "goal": "Build Next.js/FastAPI topology, disposable PostgreSQL/pgvector, Alembic and real lint/test commands.",
       "human_gates": [],
-      "evidence": []
+      "evidence": [
+        {
+          "at": "2026-11-08T10:16:44.581207+00:00",
+          "kind": "manual_verification",
+          "note": "Frontend build/tests and backend lint/tests verified manually."
+        }
+      ]
     },
     {
       "id": "D-010",

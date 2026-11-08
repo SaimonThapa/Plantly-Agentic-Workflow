@@ -29,3 +29,13 @@ Codex's documented repository skill path is `.agents/skills/<name>/SKILL.md`, **
 5. Use explicit **missing-asset** labels; don't generate fake photos or logo artwork.
 6. No plugin may weaken auth, privacy, test requirements or human-reviewed agronomy rules.
 7. Ponytail may promote smaller diffs; **no assumption of actual token/currency savings** and no automatic model/retry budget.
+
+### Scoped design-skill routing
+
+- **Marketing / new UI (PERSUADE):** read relevant DESIGN and LANDING_DESIGN sections, then Taste if discovered. Preserve real specified composition and truthful CTA states.
+- **Workspace / input / dashboard UI (OPERATE):** DESIGN + relevant PRODUCT/ARCHITECTURE sections; Taste only for major layout work. No invented metrics.
+- **Chat / explanation UI (EXPLAIN):** DESIGN + actual chat contract; prioritize cited evidence and accessible reading hierarchy.
+- **Review:** Impeccable on meaningful implemented UI, not every minor patch; browser review must test actual working screens.
+- **Motion:** Animate only if available and motion helps the task. Respect reduced motion and performance constraints.
+- **Efficiency:** Ponytail only if installed/trusted as a plugin, not a skill folder. Simplicity guidance only; the external Python runner controls retries/reasoning efforts, not Ponytail.
+- **Fallback:** absent skill -> do the work directly according to approved docs and record that optional assistance was unavailable; do not hallucinate a skill run.

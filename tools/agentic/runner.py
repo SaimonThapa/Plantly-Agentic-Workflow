@@ -247,6 +247,15 @@ def safe_cwd(rel: str) -> Path:
     return dst
 
 
+def verifier_executable(program: str, cwd: Path) -> str:
+    """Prefer the backend's project venv rather than an unrelated active Python."""
+    if program == "python" and cwd.name == "backend":
+        candidate = cwd / ".venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        if candidate.is_file():
+            return str(candidate)
+    return executable(program)
+
+
 def verify(task_id: str, config: dict, run_folder: Path) -> tuple[bool, str]:
     spec = config["verification"][task_id]
     for rel in spec.get("required_paths", []):
@@ -255,14 +264,62 @@ def verify(task_id: str, config: dict, run_folder: Path) -> tuple[bool, str]:
             return False, f"Required artifact absent: {rel}"
     for idx, item in enumerate(spec["commands"], 1):
         try:
-            argv = [executable(item["argv"][0]), *item["argv"][1:]]
             cwd = safe_cwd(item["cwd"])
+            argv = [verifier_executable(item["argv"][0], cwd), *item["argv"][1:]]
             result, timed_out = run_logged(argv, cwd, run_folder / f"verify-{idx:02d}.log", config["verification_timeout_seconds"])
         except (RunnerError, OSError) as exc:
             return False, f"Verifier cannot run: {exc}"
         if timed_out or result != 0:
             return False, f"Verifier {idx} failed (exit {result}); see {run_folder / f'verify-{idx:02d}.log'}"
     return True, "All configured checks passed"
+
+
+def verify_only(task: dict, registry: dict, config: dict, runtime: dict) -> int:
+    """Verify existing files without running Codex or spending another attempt."""
+    task_id = task["id"]
+    if task_id not in config["approved_task_ids"]:
+        raise RunnerError("Task is not approved for runner verification")
+    if task.get("human_gates"):
+        raise RunnerError("Cannot bypass human gates using verification-only mode")
+    if task["status"] in {"code_verified", "released"}:
+        raise RunnerError(f"Task already has status {task['status']}")
+    lookup = {item["id"]: item for item in registry["tasks"]}
+    for dependency in task.get("depends_on", []):
+        if lookup[dependency]["status"] not in {"code_verified", "released"}:
+            raise RunnerError(f"Dependency {dependency} is not verified")
+    spec = config.get("verification", {}).get(task_id, {})
+    if not spec.get("commands"):
+        raise RunnerError("No verification commands are configured")
+    if task_id == "F-000":
+        from urllib.parse import urlsplit
+        test_url = os.environ.get("TEST_DATABASE_URL", "")
+        if urlsplit(test_url).path.lstrip("/") != "plantly_test":
+            raise RunnerError("Set TEST_DATABASE_URL to the disposable plantly_test database")
+
+    check_git(clean=False)  # preserve uncommitted implementation work
+    folder = LOG_DIR / task_id / f"manual-verify-{dt.datetime.now(dt.timezone.utc):%Y%m%dT%H%M%S}-{os.getpid()}"
+    acquire_lock()
+    try:
+        passed, reason = verify(task_id, config, folder)
+        if not passed:
+            append_issue(task_id, "verification", reason, folder)
+            print(f"[Plantly] Verification failed: {reason}")
+            print(f"[Plantly] Existing task status preserved: {task['status']}")
+            return 1
+        evidence = {
+            "at": now(), "kind": "verification_only",
+            "checks": spec["commands"], "logs": str(folder.relative_to(ROOT)),
+        }
+        record = runtime["tasks"].setdefault(task_id, {"attempts_used": 0, "attempts": []})
+        record["status"] = "code_verified"
+        record["verified_at"] = now()
+        save_runtime(runtime)
+        mark_status(registry, task, "code_verified", evidence)
+        print(f"[Plantly] {task_id} code_verified using existing files; no Codex model invoked")
+        print(f"[Plantly] Verification logs: {folder.relative_to(ROOT)}")
+        return 0
+    finally:
+        release_lock()
 
 
 def append_issue(task_id: str, category: str, explanation: str, folder: Path) -> None:
@@ -415,6 +472,8 @@ def main(argv: list[str] | None = None) -> int:
     p_run.add_argument("--execute", action="store_true")
     p_next = sub.add_parser("next")
     p_next.add_argument("--execute", action="store_true")
+    p_verify = sub.add_parser("verify", help="Verify existing code without invoking Codex")
+    p_verify.add_argument("task_id")
     p_recover = sub.add_parser("recover")
     p_recover.add_argument("--confirm-no-runner-active", action="store_true")
     p_reset = sub.add_parser("reset-attempts")
@@ -431,6 +490,11 @@ def main(argv: list[str] | None = None) -> int:
         for t in ordered:
             print(f"{t['id']:6} {t['status']:15} {t['title']}")
         return 0
+    if args.command == "verify":
+        task = lookup.get(args.task_id)
+        if task is None:
+            raise RunnerError(f"Unknown task {args.task_id}")
+        return verify_only(task, registry, config, runtime)
     if args.command == "recover":
         if not args.confirm_no_runner_active:
             raise RunnerError("First confirm no Python runner or child Codex process remains active")
